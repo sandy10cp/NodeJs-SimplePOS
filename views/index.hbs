@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Home Kasir</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    {{> header }}
+    <style>
+        #tunai {
+            font-size: 25px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+    {{> navbar }}
+
+    <div class="main">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span3">
+                        <div class="widget widget-nopad">
+                            <div class="widget-header"> <i class="icon-list-alt"></i>
+                                <h3> Kasir #K00{{iduser}} </h3>
+                            </div>
+                            <!-- /widget-header -->
+                            <div class="widget-content">
+                                <div class="widget big-stats-container">
+                                    <div class="widget-content">
+                                        <fieldset>
+                                            <form action="" id="form_penjualan" method="POST"
+                                                class="form-vertical input-barang">
+                                                <div class="control-group">
+                                                    <input type="hidden" class="span2" id="id_karyawan"
+                                                        name="id_karyawan" value="K00{{iduser}}">
+                                                    <input type="hidden" class="span2" id="code_penjualan"
+                                                        name="code_penjualan" disabled>
+                                                    <label class="control-label" for="cbarang">Code Barang</label>
+                                                    <div class="controls">
+                                                        <input type="text" class="span2" id="cbarang" name="cbarang"
+                                                            autocomplete="off" autofocus>
+                                                        <button type="button" id="src" class="btn btn-primary"
+                                                            data-toggle="modal" data-target="#modalListBarang">
+                                                            <li class="icon-search"></li>
+                                                        </button>
+                                                        <div id="code_list"></div>
+                                                    </div> <!-- /controls -->
+                                                </div> <!-- /control-group -->
+
+                                                <div class="control-group">
+                                                    <label class="control-label" for="jumlah">Jumlah Barang</label>
+                                                    <div class="controls">
+                                                        <input type="number" class="span2" id="jumlah" name="jumlah"
+                                                            min="1" value="1"
+                                                            onclick="document.execCommand('selectall',null,false);">
+                                                    </div> <!-- /controls -->
+                                                </div> <!-- /control-group -->
+                                                <div id="add_input">
+                                                </div>
+                                                <br>
+                                                <li id="add_pembeli" class="icon-plus-sign"></li>
+                                                <br>
+
+                                                <div class="control-group pull-right">
+                                                    <button type="button" id="add_pembelian"
+                                                        class="btn btn-primary">Add</button>
+                                                </div> <!-- /control-group -->
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                    <!-- /widget-content -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span4 -->
+                    <div class="span6">
+                        <div id="alert-tabel" class="alert hide">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong id="message"></strong>
+                        </div>
+                        <div class="widget widget-table action-table">
+                            <div class="widget-header"> <i class="icon-th-list"></i>
+                                <h3>Daftar Pembelian</h3>
+                            </div>
+                            <!-- /widget-header -->
+                            <div class="widget-content">
+                                <div class="widget-content" id="div-tabel">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Code</th>
+                                                <th>Nama</th>
+                                                <th>Harga</th>
+                                                <th>Jml</th>
+                                                <th>Tot</th>
+                                                <th> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tb_pembelian">
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <!-- /widget-content -->
+                            </div>
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span7 -->
+                    <div class="span3">
+                        <div class="widget widget-nopad">
+                            <div class="widget-header"> <i class="icon-list-alt"></i>
+                                <h3> Total</h3>
+                            </div>
+                            <!-- /widget-header -->
+                            <div class="widget-content">
+                                <div class="widget big-stats-container">
+                                    <div class="widget-content">
+                                        <div class="hitung_total">
+                                            <h2>Rp : <span id="tot_pembelian"></span></h2>
+                                            <br>
+                                            <div class="control-group">
+                                                <label class="control-label" for="tunai">Tunai</label>
+                                                <input type="number" class="span2" id="tunai" name="tunai">
+                                            </div>
+                                            <h3> Kembali Rp : <span id="kembali"></span></h3>
+                                            <br>
+                                            <div class="control-group pull-right">
+                                                <button id="proses" class="btn btn-success">Proses</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- /widget-content -->
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span2 -->
+                </div>
+                <!-- /row -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="modalListBarang" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">List Barang</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+    <!-- /main -->
+
+    {{> footer }}
+    <script src="/assets/js/kasir/index.js"></script>
+</body>
+
+</html>
